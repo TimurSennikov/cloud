@@ -1,0 +1,45 @@
+<body>
+  <h1>загрузка</h1>
+  <form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <button type="submit">Upload</button>
+  </form>
+
+  <h3>список</h3>
+  
+  <ul id="fileList"></ul>
+
+<script>
+  async function getFileList() {
+    const response = await fetch('/files');
+    const data = await response.json();
+    const fileList = document.getElementById('fileList');
+
+    fileList.innerHTML = '';
+
+    data.files.forEach(file => {
+      const listItem = document.createElement('li');
+      listItem.textContent = file;
+
+      listItem.addEventListener('click', function () {
+        downloadFile(file);
+      });
+
+      fileList.appendChild(listItem);
+    });
+  }
+
+  async function downloadFile(filename) {
+    const response = await fetch(`/download`);
+    const blob = await response.blob();
+
+    const i = 1;
+	}
+
+  getFileList();
+</script>
+
+</body>
+
+</html>
+

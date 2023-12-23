@@ -1,0 +1,34 @@
+<body>
+  <h1>File Upload</h1>
+  <form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".txt, .pdf, .doc, .docx">
+    <button type="submit">Upload</button>
+  </form>
+
+  <h2>File List</h2>
+  <ul id="fileList"></ul>
+
+  <script>
+    // Функция для получения списка файлов и обновления списка на странице
+    async function getFileList() {
+      const response = await fetch('/files');
+      const data = await response.json();
+      const fileList = document.getElementById('fileList');
+
+      // Очистка списка перед обновлением
+      fileList.innerHTML = '';
+
+      // Добавление каждого файла в список
+      data.files.forEach(file => {
+        const listItem = document.createElement('li');
+        listItem.textContent = file;
+        fileList.appendChild(listItem);
+      });
+    }
+
+    // Вызов функции при загрузке страницы
+    getFileList();
+  </script>
+</body>
+</html>
+
