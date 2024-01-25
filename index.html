@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <body>
   <h1>загрузка</h1>
   <form action="/upload" method="post" enctype="multipart/form-data">
@@ -10,7 +12,37 @@
   <ul id="fileList"></ul>
 
 <script>
-  async function getFileList() {
+
+async function downloadFileFromServer(file) {
+    try {
+		const response = await fetch(`/download?${file}`);
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status}`);
+        }
+
+		const fileBlob = await response.blob();
+
+		const url = window.URL.createObjectURL(fileBlob);
+
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = 'list.txt';
+		
+		document.body.appendChild(a);
+
+		a.click();
+
+		document.body.removeChild(a);
+        
+		window.URL.revokeObjectURL(url);
+    } 
+
+	catch (error) {
+        console.error(error);
+    }
+}
+
+async function getFileList() {
     const response = await fetch('/files');
     const data = await response.json();
     const fileList = document.getElementById('fileList');
@@ -22,24 +54,17 @@
       listItem.textContent = file;
 
       listItem.addEventListener('click', function () {
-        downloadFile(file);
+        downloadFileFromServer(file);
       });
 
       fileList.appendChild(listItem);
     });
   }
 
-  async function downloadFile(filename) {
-    const response = await fetch(`/download`);
-    const blob = await response.blob();
-
-    const i = 1;
-	}
-
   getFileList();
+
 </script>
 
 </body>
 
 </html>
-
