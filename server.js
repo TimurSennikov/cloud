@@ -29,26 +29,21 @@ app.get ('/files', async (req,res) => {
 	}
 });
 
-app.get('/download:file', async (req, res) => {
-	try {
+app.get('/download:file', (req, res) => {
 	const name = req.params.file;
 
 	const filePath = path.join(__dirname, filestoredir, req.params.file);
 
 	const fileStream = fs.createReadStream(filePath);
 
-	res.setHeader(`'Content-Disposition', 'attachment'; filename=${name}`);
+	res.setHeader('Content-Disposition', 'attachment', 'filename=${name}');
 	
 	res.setHeader('Content-Type', 'application/json');
 
 	console.log("download");
 
 	fileStream.pipe(res);
-	}
-	catch (error) {
-	console.error(error);
-	}
-});
+	});
 
 app.post('/upload', upload.single('file'), (req, res) => {
 res.send('File uploaded successfully!');

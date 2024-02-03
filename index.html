@@ -15,7 +15,7 @@
 
 async function downloadFileFromServer(file) {
     try {
-		const response = await fetch(`/download?${file}`);
+		const response = await fetch(`/download${file}`);
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.status}`);
         }
@@ -26,7 +26,7 @@ async function downloadFileFromServer(file) {
 
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = 'list.txt';
+		a.download = file;
 		
 		document.body.appendChild(a);
 
